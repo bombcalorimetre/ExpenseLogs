@@ -1,20 +1,19 @@
 const express = require('express');
-const db = require('../config/database');
+const db      = require('../config/database');
 const { authMiddleware } = require('../middleware/auth');
 
 const router = express.Router();
 
 // GET /api/analytics/overview
 router.get('/overview', authMiddleware, (req, res) => {
-  const userId = req.user.id;
-  const now = new Date();
+  const userId      = req.user.id;
+  const now         = new Date();
   const currentMonth = now.toISOString().slice(0, 7); // YYYY-MM
-  const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1).toISOString().slice(0, 7);
+  const lastMonth    = new Date(now.getFullYear(), now.getMonth() - 1, 1).toISOString().slice(0, 7);
 
   // Total balance (all-time income - expenses)
   const balanceRow = db.prepare(`
-    SELECT
-      SUM(CASE WHEN type = 'income' THEN amount ELSE -amount END) as balance
+    SELECT SUM(CASE WHEN type = 'income' THEN amount ELSE -amount END) as balance
     FROM transactions WHERE user_id = ?
   `).get(userId);
 
@@ -22,7 +21,7 @@ router.get('/overview', authMiddleware, (req, res) => {
   const currentStats = db.prepare(`
     SELECT
       SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END) as total_expense,
-      SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END) as total_income,
+      SUM(CASE WHEN type = 'income'  THEN amount ELSE 0 END) as total_income,
       COUNT(*) as transaction_count
     FROM transactions WHERE user_id = ? AND strftime('%Y-%m', date) = ?
   `).get(userId, currentMonth);
@@ -31,7 +30,7 @@ router.get('/overview', authMiddleware, (req, res) => {
   const lastStats = db.prepare(`
     SELECT
       SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END) as total_expense,
-      SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END) as total_income
+      SUM(CASE WHEN type = 'income'  THEN amount ELSE 0 END) as total_income
     FROM transactions WHERE user_id = ? AND strftime('%Y-%m', date) = ?
   `).get(userId, lastMonth);
 
@@ -41,26 +40,27 @@ router.get('/overview', authMiddleware, (req, res) => {
     FROM transactions WHERE user_id = ? AND status = 'pending'
   `).get(userId);
 
-  // Month over month change
-  const momChange = lastStats.total_expense > 0
-    ? ((currentStats.total_expense - lastStats.total_expense) / lastStats.total_expense * 100).toFixed(1)
+  const curExpense  = (currentStats && currentStats.total_expense) || 0;
+  const lastExpense = (lastStats    && lastStats.total_expense)    || 0;
+  const momChange   = lastExpense > 0
+    ? ((curExpense - lastExpense) / lastExpense * 100).toFixed(1)
     : 0;
 
   res.json({
-    total_balance: balanceRow.balance || 0,
+    total_balance: (balanceRow && balanceRow.balance) || 0,
     current_month: {
-      total_expense: currentStats.total_expense || 0,
-      total_income: currentStats.total_income || 0,
-      transaction_count: currentStats.transaction_count || 0,
+      total_expense:     curExpense,
+      total_income:      (currentStats && currentStats.total_income)      || 0,
+      transaction_count: (currentStats && currentStats.transaction_count) || 0,
     },
     last_month: {
-      total_expense: lastStats.total_expense || 0,
-      total_income: lastStats.total_income || 0,
+      total_expense: lastExpense,
+      total_income:  (lastStats && lastStats.total_income) || 0,
     },
     mom_change: Number(momChange),
     pending_transactions: {
-      count: pending.count || 0,
-      total: pending.total || 0,
+      count: (pending && pending.count) || 0,
+      total: (pending && pending.total) || 0,
     },
   });
 });
@@ -79,7 +79,7 @@ router.get('/monthly-trends', authMiddleware, (req, res) => {
     const row = db.prepare(`
       SELECT
         SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END) as expenses,
-        SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END) as income
+        SUM(CASE WHEN type = 'income'  THEN amount ELSE 0 END) as income
       FROM transactions WHERE user_id = ? AND strftime('%Y-%m', date) = ?
     `).get(userId, month);
 
@@ -87,9 +87,9 @@ router.get('/monthly-trends', authMiddleware, (req, res) => {
     return {
       month,
       label,
-      expenses: row.expenses || 0,
-      income: row.income || 0,
-      net: (row.income || 0) - (row.expenses || 0),
+      expenses: (row && row.expenses) || 0,
+      income:   (row && row.income)   || 0,
+      net:      ((row && row.income) || 0) - ((row && row.expenses) || 0),
     };
   });
 
@@ -98,14 +98,14 @@ router.get('/monthly-trends', authMiddleware, (req, res) => {
 
 // GET /api/analytics/category-distribution
 router.get('/category-distribution', authMiddleware, (req, res) => {
-  const userId = req.user.id;
-  const { month } = req.query;
+  const userId      = req.user.id;
+  const { month }   = req.query;
   const targetMonth = month || new Date().toISOString().slice(0, 7);
 
   const data = db.prepare(`
     SELECT c.name, c.icon, c.color, c.type,
       SUM(t.amount) as total,
-      COUNT(t.id) as count
+      COUNT(t.id)   as count
     FROM transactions t
     JOIN categories c ON t.category_id = c.id
     WHERE t.user_id = ? AND strftime('%Y-%m', t.date) = ? AND t.type = 'expense'
@@ -114,7 +114,7 @@ router.get('/category-distribution', authMiddleware, (req, res) => {
   `).all(userId, targetMonth);
 
   const grandTotal = data.reduce((s, r) => s + r.total, 0);
-  const result = data.map(r => ({
+  const result     = data.map(r => ({
     ...r,
     percentage: grandTotal > 0 ? ((r.total / grandTotal) * 100).toFixed(1) : 0,
   }));
@@ -124,7 +124,7 @@ router.get('/category-distribution', authMiddleware, (req, res) => {
 
 // GET /api/analytics/budgets
 router.get('/budgets', authMiddleware, (req, res) => {
-  const userId = req.user.id;
+  const userId       = req.user.id;
   const currentMonth = new Date().toISOString().slice(0, 7);
 
   const budgets = db.prepare(`
@@ -142,21 +142,19 @@ router.get('/budgets', authMiddleware, (req, res) => {
 
   res.json(budgets.map(b => ({
     ...b,
-    percentage: b.budget_limit > 0 ? Math.min(100, (b.spent / b.budget_limit * 100)).toFixed(0) : 0,
+    percentage:    b.budget_limit > 0 ? Math.min(100, (b.spent / b.budget_limit * 100)).toFixed(0) : 0,
     is_near_limit: b.spent / b.budget_limit >= 0.85,
-    is_over: b.spent > b.budget_limit,
+    is_over:       b.spent > b.budget_limit,
   })));
 });
 
 // GET /api/analytics/spending-velocity
 router.get('/spending-velocity', authMiddleware, (req, res) => {
   const userId = req.user.id;
-  // Daily spend for last 30 days
-  const data = db.prepare(`
+  const data   = db.prepare(`
     SELECT date, SUM(CASE WHEN type='expense' THEN amount ELSE 0 END) as spent
     FROM transactions
-    WHERE user_id = ?
-      AND date >= date('now', '-30 days')
+    WHERE user_id = ? AND date >= date('now', '-30 days')
     GROUP BY date
     ORDER BY date ASC
   `).all(userId);
@@ -182,14 +180,14 @@ router.post('/goals', authMiddleware, (req, res) => {
 
 // GET /api/analytics/calendar/:year/:month
 router.get('/calendar/:year/:month', authMiddleware, (req, res) => {
-  const userId = req.user.id;
+  const userId   = req.user.id;
   const { year, month } = req.params;
   const monthStr = `${year}-${month.padStart(2, '0')}`;
 
   const daily = db.prepare(`
     SELECT date,
       SUM(CASE WHEN type='expense' THEN amount ELSE 0 END) as expenses,
-      SUM(CASE WHEN type='income' THEN amount ELSE 0 END) as income,
+      SUM(CASE WHEN type='income'  THEN amount ELSE 0 END) as income,
       COUNT(*) as count
     FROM transactions
     WHERE user_id = ? AND strftime('%Y-%m', date) = ?
@@ -202,13 +200,12 @@ router.get('/calendar/:year/:month', authMiddleware, (req, res) => {
 
 // GET /api/analytics/top-merchants
 router.get('/top-merchants', authMiddleware, (req, res) => {
-  const userId = req.user.id;
+  const userId      = req.user.id;
   const { limit = 5 } = req.query;
-  const data = db.prepare(`
+  const data        = db.prepare(`
     SELECT merchant, SUM(amount) as total, COUNT(*) as count
     FROM transactions
-    WHERE user_id = ? AND type = 'expense'
-      AND date >= date('now', '-30 days')
+    WHERE user_id = ? AND type = 'expense' AND date >= date('now', '-30 days')
     GROUP BY merchant
     ORDER BY total DESC
     LIMIT ?
