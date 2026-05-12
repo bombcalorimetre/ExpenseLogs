@@ -55,7 +55,6 @@ export default function Sidebar() {
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={styles.userName}>{user?.name || 'User'}</div>
-
           </div>
           <button onClick={handleLogout} style={styles.logoutBtn} title="Logout">
             <LogoutIcon />
@@ -84,8 +83,8 @@ const styles = {
     cursor: 'pointer',
   },
   navActive: {
-    background: 'rgba(0,212,170,0.1)', color: 'var(--accent)',
-    boxShadow: 'inset 2px 0 0 var(--accent)',
+    background: 'rgba(30,58,138,0.35)', color: '#93c5fd',
+    boxShadow: 'inset 2px 0 0 #3b82f6',
   },
   userSection: { padding: '12px 10px', borderTop: '1px solid var(--border)' },
   userCard: { display: 'flex', alignItems: 'center', gap: 10, padding: '8px 10px', borderRadius: 'var(--radius-sm)' },
@@ -95,7 +94,6 @@ const styles = {
     fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 13, color: '#0d1117', flexShrink: 0,
   },
   userName: { fontSize: 13, fontWeight: 600, color: 'var(--text-primary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' },
-  userType: { fontSize: 11, color: 'var(--text-muted)' },
   logoutBtn: {
     background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer',
     padding: 4, borderRadius: 6, transition: 'var(--transition)', flexShrink: 0,

@@ -42,14 +42,4 @@ const styles = {
     fontSize: 13, width: '100%',
   },
   right: { display: 'flex', alignItems: 'center', gap: 6 },
-  iconBtn: {
-    background: 'none', border: 'none', color: 'var(--text-secondary)',
-    cursor: 'pointer', padding: '6px', borderRadius: 8, display: 'flex',
-    alignItems: 'center', justifyContent: 'center', position: 'relative',
-    transition: 'var(--transition)',
-  },
-  badge: {
-    position: 'absolute', top: 6, right: 6, width: 6, height: 6,
-    borderRadius: '50%', background: 'var(--accent)',
-  },
 };

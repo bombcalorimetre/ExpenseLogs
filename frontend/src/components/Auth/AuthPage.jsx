@@ -53,18 +53,6 @@ export default function AuthPage() {
             Command your<br />
             <span style={{ color: 'var(--accent)' }}>financial universe</span>
           </h1>
-          <p style={styles.heroSub}>
-            Track every dollar across all accounts, analyze spending patterns,
-            and reach your wealth goals with precision instruments.
-          </p>
-          <div style={styles.stats}>
-            {[['$412K', 'Assets Tracked'], ['99.9%', 'Uptime'], ['256-bit', 'Encryption']].map(([val, label]) => (
-              <div key={label} style={styles.stat}>
-                <span style={styles.statVal}>{val}</span>
-                <span style={styles.statLabel}>{label}</span>
-              </div>
-            ))}
-          </div>
         </div>
       </div>
 
@@ -76,19 +64,10 @@ export default function AuthPage() {
             </h2>
             <p style={styles.cardSub}>
               {mode === 'login'
-                ? 'Sign in to your premium account'
+                ? 'FinCorp, your expense companion'
                 : 'Start your wealth management journey'}
             </p>
           </div>
-
-          {/* Demo hint */}
-          {mode === 'login' && (
-            <div style={styles.demo}>
-              <span style={{ fontSize: 13, color: 'var(--text-secondary)' }}>
-                Demo: <strong style={{ color: 'var(--accent)' }}>alex@fincorp.com</strong> / <strong style={{ color: 'var(--accent)' }}>demo1234</strong>
-              </span>
-            </div>
-          )}
 
           <form onSubmit={handleSubmit} style={styles.form}>
             {mode === 'register' && (
@@ -198,11 +177,7 @@ const styles = {
     fontFamily: 'var(--font-display)', fontSize: 52, fontWeight: 800, lineHeight: 1.1,
     color: 'var(--text-primary)', marginBottom: 20,
   },
-  heroSub: { fontSize: 16, color: 'var(--text-secondary)', lineHeight: 1.7, marginBottom: 48 },
-  stats: { display: 'flex', gap: 40 },
-  stat: { display: 'flex', flexDirection: 'column', gap: 4 },
-  statVal: { fontFamily: 'var(--font-display)', fontSize: 22, fontWeight: 700, color: 'var(--accent)' },
-  statLabel: { fontSize: 12, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em' },
+
   right: {
     width: 480, display: 'flex', alignItems: 'center', justifyContent: 'center',
     padding: 40, position: 'relative', zIndex: 1,
@@ -213,10 +188,6 @@ const styles = {
   cardHeader: { marginBottom: 28 },
   cardTitle: { fontFamily: 'var(--font-display)', fontSize: 28, fontWeight: 700, marginBottom: 6 },
   cardSub: { fontSize: 14, color: 'var(--text-secondary)' },
-  demo: {
-    background: 'rgba(0,212,170,0.06)', border: '1px solid rgba(0,212,170,0.15)',
-    borderRadius: 'var(--radius-sm)', padding: '10px 14px', marginBottom: 20,
-  },
   form: { display: 'flex', flexDirection: 'column', gap: 16 },
   field: { display: 'flex', flexDirection: 'column', gap: 6 },
   label: { fontSize: 12, fontWeight: 500, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.06em' },

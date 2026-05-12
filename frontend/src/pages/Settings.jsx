@@ -78,11 +78,7 @@ export default function Settings({ toast }) {
                 </button>
               ))}
             </nav>
-            {/* Upgrade card */}
-            <div style={styles.upgradeCard}>
-              <div style={{ fontSize: 14, fontWeight: 700, fontFamily: 'var(--font-display)', marginBottom: 4 }}>Upgrade Plan</div>
-              <div style={{ fontSize: 11, color: 'rgba(13,17,23,0.7)' }}>Explore Elite Concierge</div>
-            </div>
+
           </div>
 
           {/* Right: panels */}
@@ -270,11 +266,7 @@ const styles = {
     fontSize: 13, fontWeight: 500, fontFamily: 'var(--font-body)', textAlign: 'left', width: '100%',
     transition: 'var(--transition)',
   },
-  tabBtnActive: { background: 'rgba(0,212,170,0.1)', color: 'var(--accent)', boxShadow: 'inset 2px 0 0 var(--accent)' },
-  upgradeCard: {
-    marginTop: 'auto', marginTop: 20, background: 'linear-gradient(135deg, var(--accent), var(--blue))',
-    borderRadius: 10, padding: '14px 16px', cursor: 'pointer',
-  },
+  tabBtnActive: { background: 'rgba(30,58,138,0.35)', color: '#93c5fd', boxShadow: 'inset 2px 0 0 #3b82f6' },
   panels: { display: 'flex', flexDirection: 'column', gap: 16 },
   panel: { display: 'flex', flexDirection: 'column', gap: 16 },
   section: { background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 'var(--radius-lg)', padding: '22px 24px' },
