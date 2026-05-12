@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { analyticsAPI, transactionsAPI } from '../../services/api';
-import Header from '../Layout/Header';
+import { analyticsAPI, transactionsAPI } from '../services/api';
+import Header from '../components/Layout/Header';
 
 const DAYS = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
 const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];

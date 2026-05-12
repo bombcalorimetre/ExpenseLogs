@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { transactionsAPI, categoriesAPI } from '../../services/api';
-import Header from '../Layout/Header';
+import { transactionsAPI, categoriesAPI } from '../services/api';
+import Header from '../components/Layout/Header';
 
 const fmt = (n) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(n);
 

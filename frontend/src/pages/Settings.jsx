@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../../context/AuthContext';
-import { authAPI, categoriesAPI } from '../../services/api';
-import Header from '../Layout/Header';
+import { useAuth } from '../context/AuthContext';
+import { authAPI, categoriesAPI } from '../services/api';
+import Header from '../components/Layout/Header';
 
 export default function Settings({ toast }) {
   const { user, updateUser, logout } = useAuth();
