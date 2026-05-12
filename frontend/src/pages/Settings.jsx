@@ -89,25 +89,6 @@ export default function Settings({ toast }) {
           <div style={styles.panels}>
             {tab === 'general' && (
               <div style={styles.panel}>
-                {/* Account Security info */}
-                <div style={styles.section}>
-                  <div style={styles.sectionHeader}>
-                    <div style={styles.sectionIcon}>🛡</div>
-                    <div>
-                      <div style={styles.sectionTitle}>Account Security</div>
-                      <div style={styles.sectionSub}>Multi-factor authentication and access logs</div>
-                    </div>
-                    <span style={styles.badge}>High Protection</span>
-                  </div>
-                  <div style={styles.secRow}>
-                    <div>
-                      <div style={{ fontSize: 13, fontWeight: 500 }}>Recent Active Sessions</div>
-                      <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>3 devices currently logged in</div>
-                    </div>
-                    <button style={styles.reviewBtn}>Review All</button>
-                  </div>
-                </div>
-
                 {/* General Preferences */}
                 <div style={styles.section}>
                   <div style={{ marginBottom: 16 }}>

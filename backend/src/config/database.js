@@ -26,7 +26,7 @@ function initializeDatabase() {
       email TEXT UNIQUE NOT NULL,
       password TEXT NOT NULL,
       avatar TEXT DEFAULT NULL,
-      account_type TEXT DEFAULT 'Standard',
+
       base_currency TEXT DEFAULT 'USD',
       fiscal_year_start TEXT DEFAULT 'January 1st',
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -108,7 +108,7 @@ function initializeDatabase() {
   if (!demoUser) {
     const hash = bcrypt.hashSync('demo1234', 10);
     const result = db.prepare(`
-      INSERT INTO users (name, email, password, account_type, base_currency)
+      INSERT INTO users (name, email, password, base_currency)
       VALUES (?, ?, ?, ?, ?)
     `).run('Alex Sterling', 'alex@fincorp.com', hash, 'Premium Account', 'USD');
 

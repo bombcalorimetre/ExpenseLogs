@@ -55,7 +55,7 @@ export default function Sidebar() {
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={styles.userName}>{user?.name || 'User'}</div>
-            <div style={styles.userType}>{user?.account_type || 'Standard'}</div>
+
           </div>
           <button onClick={handleLogout} style={styles.logoutBtn} title="Logout">
             <LogoutIcon />
