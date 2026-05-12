@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { useToast } from './hooks/useToast';
@@ -11,6 +11,10 @@ import Trends from './pages/Trends';
 import Calendar from './pages/Calendar';
 import Settings from './pages/Settings';
 import './styles/globals.css';
+
+// Apply saved theme on load
+const savedTheme = localStorage.getItem('fincorp_theme') || 'dark';
+document.documentElement.setAttribute('data-theme', savedTheme);
 
 function AppLayout() {
   const { toasts, success, error, info } = useToast();
@@ -48,15 +52,15 @@ function LoadingScreen() {
       background: 'var(--bg-primary)', flexDirection: 'column', gap: 16,
     }}>
       <div style={{
-        width: 40, height: 40, borderRadius: 10, background: 'rgba(0,212,170,0.15)',
+        width: 40, height: 40, borderRadius: 10, background: 'rgba(59,130,246,0.15)',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
       }}>
         <svg width="22" height="22" viewBox="0 0 28 28" fill="none">
-          <path d="M8 14h12M14 8v12M8 10l6-2 6 2M8 18l6 2 6-2" stroke="#00d4aa" strokeWidth="1.5" strokeLinecap="round" />
+          <path d="M8 14h12M14 8v12M8 10l6-2 6 2M8 18l6 2 6-2" stroke="#3b82f6" strokeWidth="1.5" strokeLinecap="round" />
         </svg>
       </div>
       <div style={{
-        width: 24, height: 24, border: '2px solid rgba(0,212,170,0.2)',
+        width: 24, height: 24, border: '2px solid rgba(59,130,246,0.2)',
         borderTop: '2px solid var(--accent)', borderRadius: '50%',
         animation: 'spin 0.8s linear infinite',
       }} />

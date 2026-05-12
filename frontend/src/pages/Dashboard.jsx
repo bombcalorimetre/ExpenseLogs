@@ -51,7 +51,7 @@ export default function Dashboard() {
             </div>
             {/* Mini bar viz */}
             <div style={styles.miniBar}>
-              <div style={{ flex: 1, background: 'rgba(0,212,170,0.15)', borderRadius: 4, overflow: 'hidden', height: 3 }}>
+              <div style={{ flex: 1, background: 'rgba(59,130,246,0.15)', borderRadius: 4, overflow: 'hidden', height: 3 }}>
                 <div style={{ width: `${Math.min(100, (overview?.current_month?.total_expense / (overview?.current_month?.total_income || 1)) * 100)}%`, height: '100%', background: 'var(--accent)' }} />
               </div>
             </div>
@@ -190,8 +190,8 @@ const styles = {
   content: { flex: 1, overflow: 'auto', padding: 24, display: 'flex', flexDirection: 'column', gap: 20 },
   topRow: { display: 'grid', gridTemplateColumns: '280px 1fr', gap: 16 },
   balanceCard: {
-    background: 'linear-gradient(135deg, rgba(0,212,170,0.12), rgba(79,142,247,0.08))',
-    border: '1px solid rgba(0,212,170,0.2)', borderRadius: 'var(--radius-lg)',
+    background: 'linear-gradient(135deg, rgba(59,130,246,0.12), rgba(79,142,247,0.08))',
+    border: '1px solid rgba(59,130,246,0.2)', borderRadius: 'var(--radius-lg)',
     padding: '24px 24px 20px',
   },
   balanceLabel: { fontSize: 11, fontWeight: 600, color: 'var(--text-muted)', letterSpacing: '0.1em', marginBottom: 8 },

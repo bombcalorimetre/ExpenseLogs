@@ -35,7 +35,7 @@ export default function Trends() {
   const savingsRate = latestIncome > 0 ? (((latestIncome - latestExpenses) / latestIncome) * 100).toFixed(1) : 0;
   const yearEndForecast = avgBurn * 12;
 
-  const COLORS = dist.categories.map(c => c.color || '#00d4aa');
+  const COLORS = dist.categories.map(c => c.color || '#3b82f6');
 
   return (
     <div style={styles.page}>

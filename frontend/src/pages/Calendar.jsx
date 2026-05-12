@@ -142,13 +142,13 @@ export default function Calendar() {
                   const pct = (d.spent / maxSpent) * 100;
                   return (
                     <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
-                      <div style={{ height: `${Math.max(4, pct)}%`, background: pct > 70 ? 'var(--accent)' : 'rgba(0,212,170,0.3)', borderRadius: '2px 2px 0 0', transition: 'height 0.3s' }} />
+                      <div style={{ height: `${Math.max(4, pct)}%`, background: pct > 70 ? 'var(--accent)' : 'rgba(59,130,246,0.3)', borderRadius: '2px 2px 0 0', transition: 'height 0.3s' }} />
                     </div>
                   );
                 })}
                 {velocity.length === 0 && Array(30).fill(0).map((_, i) => (
                   <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
-                    <div style={{ height: `${10 + Math.random() * 40}%`, background: 'rgba(0,212,170,0.2)', borderRadius: '2px 2px 0 0' }} />
+                    <div style={{ height: `${10 + Math.random() * 40}%`, background: 'rgba(59,130,246,0.2)', borderRadius: '2px 2px 0 0' }} />
                   </div>
                 ))}
               </div>
@@ -248,7 +248,7 @@ const styles = {
     cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center',
     transition: 'all 0.15s', fontSize: 12,
   },
-  calCellSelected: { background: 'rgba(0,212,170,0.1)', border: '1px solid rgba(0,212,170,0.3)' },
+  calCellSelected: { background: 'rgba(59,130,246,0.1)', border: '1px solid rgba(59,130,246,0.3)' },
   calCellToday: { background: 'rgba(79,142,247,0.08)', border: '1px solid rgba(79,142,247,0.2)' },
   velocitySection: { marginTop: 16, paddingTop: 16, borderTop: '1px solid var(--border)' },
   rightPanel: { display: 'flex', flexDirection: 'column', gap: 14 },
@@ -259,11 +259,11 @@ const styles = {
   budgetCard: { background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 'var(--radius-lg)', padding: 18 },
   progressBar: { height: 6, background: 'var(--bg-primary)', borderRadius: 99, overflow: 'hidden' },
   goalCard: {
-    background: 'linear-gradient(135deg, rgba(0,212,170,0.08), rgba(79,142,247,0.06))',
-    border: '1px solid rgba(0,212,170,0.2)', borderRadius: 'var(--radius-lg)', padding: 18,
+    background: 'linear-gradient(135deg, rgba(59,130,246,0.08), rgba(79,142,247,0.06))',
+    border: '1px solid rgba(59,130,246,0.2)', borderRadius: 'var(--radius-lg)', padding: 18,
   },
   goalBadge: {
-    display: 'inline-block', background: 'rgba(0,212,170,0.15)', border: '1px solid rgba(0,212,170,0.25)',
+    display: 'inline-block', background: 'rgba(59,130,246,0.15)', border: '1px solid rgba(59,130,246,0.25)',
     borderRadius: 20, padding: '3px 10px', fontSize: 10, fontWeight: 700, color: 'var(--accent)',
     letterSpacing: '0.08em', marginBottom: 10,
   },

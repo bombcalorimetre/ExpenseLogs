@@ -10,7 +10,17 @@ export default function Settings({ toast }) {
   const [pwForm, setPwForm] = useState({ current_password: '', new_password: '', confirm: '' });
   const [categories, setCategories] = useState([]);
   const [saving, setSaving] = useState(false);
-  const [newCat, setNewCat] = useState({ name: '', icon: '📦', color: '#00d4aa', budget_limit: '', type: 'expense' });
+  const [newCat, setNewCat] = useState({ name: '', icon: '📦', color: '#3b82f6', budget_limit: '', type: 'expense' });
+  const [theme, setTheme] = useState(() => localStorage.getItem('fincorp_theme') || 'dark');
+
+  const applyTheme = (t) => {
+    const resolved = t === 'system'
+      ? (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark')
+      : t;
+    document.documentElement.setAttribute('data-theme', resolved);
+    localStorage.setItem('fincorp_theme', t);
+    setTheme(t);
+  };
 
   useEffect(() => {
     if (user) setForm({ name: user.name || '', base_currency: user.base_currency || 'USD', fiscal_year_start: user.fiscal_year_start || 'January 1st' });
@@ -45,7 +55,7 @@ export default function Settings({ toast }) {
     try {
       const res = await categoriesAPI.create({ ...newCat, budget_limit: parseFloat(newCat.budget_limit) || 0 });
       setCategories(prev => [...prev, res.data]);
-      setNewCat({ name: '', icon: '📦', color: '#00d4aa', budget_limit: '', type: 'expense' });
+      setNewCat({ name: '', icon: '📦', color: '#3b82f6', budget_limit: '', type: 'expense' });
       toast?.success('Category added!');
     } catch (e) { toast?.error('Failed to add category'); }
   };
@@ -221,20 +231,56 @@ export default function Settings({ toast }) {
             {tab === 'appearance' && (
               <div style={styles.panel}>
                 <div style={styles.section}>
-                  <div style={{ marginBottom: 20 }}>
+                  <div style={{ marginBottom: 24 }}>
                     <div style={styles.sectionTitle}>Theme Appearance</div>
-                    <div style={styles.sectionSub}>Select your preferred visual mode</div>
+                    <div style={styles.sectionSub}>Choose your preferred visual mode — changes apply instantly</div>
                   </div>
+
                   <div style={styles.themeRow}>
-                    {['Dark', 'Light', 'System'].map(t => (
-                      <div key={t} style={{ ...styles.themeCard, ...(t === 'Dark' ? styles.themeCardActive : {}) }}>
-                        <div style={{ ...styles.themePreview, background: t === 'Light' ? '#f0f0f0' : t === 'System' ? 'linear-gradient(135deg, #1c2230 50%, #f0f0f0 50%)' : '#1c2230' }} />
-                        <span style={{ fontSize: 12, marginTop: 6 }}>{t}</span>
-                      </div>
-                    ))}
+                    {[
+                      { key: 'dark', label: 'Dark', icon: '🌙', preview: 'linear-gradient(135deg, #0d1117 0%, #1c2230 100%)', border: '#1c2230' },
+                      { key: 'light', label: 'Light', icon: '☀️', preview: 'linear-gradient(135deg, #f0f4ff 0%, #ffffff 100%)', border: '#dbeafe' },
+                      { key: 'system', label: 'System', icon: '💻', preview: 'linear-gradient(135deg, #1c2230 50%, #f0f4ff 50%)', border: '#1c2230' },
+                    ].map(({ key, label, icon, preview, border }) => {
+                      const isActive = theme === key;
+                      return (
+                        <div
+                          key={key}
+                          onClick={() => applyTheme(key)}
+                          style={{
+                            ...styles.themeCard,
+                            ...(isActive ? styles.themeCardActive : {}),
+                            cursor: 'pointer',
+                          }}
+                        >
+                          <div style={{
+                            width: 90, height: 56, borderRadius: 8, background: preview,
+                            border: `1px solid ${border}`, marginBottom: 10,
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            fontSize: 22, boxShadow: isActive ? '0 0 0 2px var(--accent)' : 'none',
+                            transition: 'box-shadow 0.2s',
+                          }}>
+                            {icon}
+                          </div>
+                          <span style={{ fontSize: 12, fontWeight: isActive ? 700 : 500, color: isActive ? 'var(--accent)' : 'var(--text-secondary)' }}>
+                            {label}
+                          </span>
+                          {isActive && (
+                            <div style={{ marginTop: 6, width: 6, height: 6, borderRadius: '50%', background: 'var(--accent)' }} />
+                          )}
+                        </div>
+                      );
+                    })}
                   </div>
-                  <div style={{ marginTop: 24, padding: 16, background: 'rgba(0,212,170,0.06)', border: '1px solid rgba(0,212,170,0.15)', borderRadius: 10, fontSize: 12, color: 'var(--text-secondary)' }}>
-                    ℹ Currently in Dark Mode. Light and System themes coming soon.
+
+                  <div style={{ marginTop: 24, padding: '14px 16px', background: 'var(--accent-dim)', border: '1px solid var(--border-active)', borderRadius: 10, fontSize: 12, color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <span style={{ fontSize: 14 }}>
+                      {theme === 'dark' ? '🌙' : theme === 'light' ? '☀️' : '💻'}
+                    </span>
+                    Currently using <strong style={{ color: 'var(--accent)', marginLeft: 4 }}>
+                      {theme === 'dark' ? 'Dark' : theme === 'light' ? 'Light' : 'System'} mode
+                    </strong>
+                    {theme === 'system' && <span style={{ marginLeft: 4 }}>(follows your OS preference)</span>}
                   </div>
                 </div>
               </div>
@@ -271,10 +317,10 @@ const styles = {
   panel: { display: 'flex', flexDirection: 'column', gap: 16 },
   section: { background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 'var(--radius-lg)', padding: '22px 24px' },
   sectionHeader: { display: 'flex', alignItems: 'center', gap: 14, marginBottom: 16 },
-  sectionIcon: { width: 36, height: 36, borderRadius: 10, background: 'rgba(0,212,170,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16 },
+  sectionIcon: { width: 36, height: 36, borderRadius: 10, background: 'rgba(59,130,246,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16 },
   sectionTitle: { fontSize: 14, fontWeight: 700, marginBottom: 2 },
   sectionSub: { fontSize: 12, color: 'var(--text-muted)' },
-  badge: { marginLeft: 'auto', background: 'rgba(0,212,170,0.15)', border: '1px solid rgba(0,212,170,0.25)', borderRadius: 20, padding: '4px 12px', fontSize: 11, fontWeight: 600, color: 'var(--accent)' },
+  badge: { marginLeft: 'auto', background: 'rgba(59,130,246,0.15)', border: '1px solid rgba(59,130,246,0.25)', borderRadius: 20, padding: '4px 12px', fontSize: 11, fontWeight: 600, color: 'var(--accent)' },
   secRow: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 0', borderTop: '1px solid var(--border)' },
   reviewBtn: { background: 'none', border: '1px solid var(--border)', borderRadius: 8, padding: '6px 14px', color: 'var(--text-secondary)', fontSize: 12, cursor: 'pointer', fontFamily: 'var(--font-body)' },
   formGrid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 },
@@ -300,7 +346,7 @@ const styles = {
   catDot: { width: 34, height: 34, borderRadius: 9, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 15, flexShrink: 0 },
   deleteBtn: { background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: 14, padding: 4, borderRadius: 6 },
   themeRow: { display: 'flex', gap: 16 },
-  themeCard: { display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer', padding: '12px 16px', border: '2px solid var(--border)', borderRadius: 10 },
-  themeCardActive: { border: '2px solid var(--accent)', background: 'rgba(0,212,170,0.06)' },
+  themeCard: { display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer', padding: '14px 20px', border: '2px solid var(--border)', borderRadius: 12, transition: 'var(--transition)' },
+  themeCardActive: { border: '2px solid var(--accent)', background: 'var(--accent-dim)' },
   themePreview: { width: 80, height: 48, borderRadius: 6 },
 };

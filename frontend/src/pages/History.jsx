@@ -337,7 +337,7 @@ const styles = {
   },
   dateGroup: {
     padding: '8px 20px', fontSize: 11, fontWeight: 600, color: 'var(--accent)',
-    background: 'rgba(0,212,170,0.04)', borderBottom: '1px solid var(--border)',
+    background: 'rgba(59,130,246,0.04)', borderBottom: '1px solid var(--border)',
   },
   txRow: {
     display: 'grid', gridTemplateColumns: '2.5fr 1.2fr 1fr 1fr', gap: 16, alignItems: 'center',
@@ -362,7 +362,7 @@ const styles = {
     background: 'none', color: 'var(--text-secondary)', cursor: 'pointer', fontSize: 13, fontWeight: 500,
     fontFamily: 'var(--font-body)',
   },
-  typeBtnActive: { background: 'rgba(0,212,170,0.1)', borderColor: 'rgba(0,212,170,0.3)', color: 'var(--accent)' },
+  typeBtnActive: { background: 'rgba(59,130,246,0.1)', borderColor: 'rgba(59,130,246,0.3)', color: 'var(--accent)' },
   amountDisplay: {
     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4,
     background: 'var(--bg-card)', borderRadius: 'var(--radius)', padding: '20px', textAlign: 'center',

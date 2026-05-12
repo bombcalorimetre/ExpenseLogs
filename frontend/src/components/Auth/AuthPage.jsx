@@ -40,8 +40,8 @@ export default function AuthPage() {
         <div style={styles.brand}>
           <div style={styles.logo}>
             <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-              <rect width="28" height="28" rx="8" fill="rgba(0,212,170,0.15)" />
-              <path d="M8 14h12M14 8v12M8 10l6-2 6 2M8 18l6 2 6-2" stroke="#00d4aa" strokeWidth="1.5" strokeLinecap="round" />
+              <rect width="28" height="28" rx="8" fill="rgba(59,130,246,0.15)" />
+              <path d="M8 14h12M14 8v12M8 10l6-2 6 2M8 18l6 2 6-2" stroke="#3b82f6" strokeWidth="1.5" strokeLinecap="round" />
             </svg>
             <span style={styles.brandName}>FinCorp Elite</span>
           </div>
@@ -151,7 +151,7 @@ const styles = {
   bg: { position: 'absolute', inset: 0, zIndex: 0 },
   orb1: {
     position: 'absolute', width: 600, height: 600, borderRadius: '50%',
-    background: 'radial-gradient(circle, rgba(0,212,170,0.08) 0%, transparent 70%)',
+    background: 'radial-gradient(circle, rgba(59,130,246,0.08) 0%, transparent 70%)',
     top: '-200px', left: '-100px',
   },
   orb2: {
@@ -200,7 +200,7 @@ const styles = {
     background: 'var(--bg-input)', border: '1px solid var(--border-active)',
     borderRadius: 'var(--radius-sm)', padding: '11px 14px', color: 'var(--text-primary)',
     fontSize: 14, outline: 'none', transition: 'var(--transition)', width: '100%',
-    boxShadow: '0 0 0 3px rgba(0,212,170,0.08)',
+    boxShadow: '0 0 0 3px rgba(59,130,246,0.08)',
   },
   error: {
     background: 'rgba(255,107,107,0.08)', border: '1px solid rgba(255,107,107,0.2)',
@@ -214,7 +214,7 @@ const styles = {
     transition: 'var(--transition)', letterSpacing: '0.02em',
   },
   btnDisabled: {
-    background: 'rgba(0,212,170,0.4)', color: '#0d1117', border: 'none',
+    background: 'rgba(59,130,246,0.4)', color: '#0d1117', border: 'none',
     borderRadius: 'var(--radius-sm)', padding: '13px 20px', fontFamily: 'var(--font-body)',
     fontSize: 14, fontWeight: 600, cursor: 'not-allowed', marginTop: 4,
     display: 'flex', alignItems: 'center', justifyContent: 'center',

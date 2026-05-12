@@ -1,18 +1,19 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-:root {
+/* ── Dark theme (default) ── */
+:root, [data-theme="dark"] {
   --bg-primary: #0d1117;
   --bg-secondary: #161b22;
   --bg-card: #1c2230;
   --bg-card-hover: #212940;
   --bg-input: #1a2035;
   --border: rgba(255,255,255,0.06);
-  --border-active: rgba(0,212,170,0.3);
-  --accent: #00d4aa;
-  --accent-dim: rgba(0,212,170,0.12);
-  --accent-glow: 0 0 20px rgba(0,212,170,0.25);
-  --blue: #4F8EF7;
-  --blue-dim: rgba(79,142,247,0.12);
+  --border-active: rgba(59,130,246,0.4);
+  --accent: #3b82f6;
+  --accent-dim: rgba(59,130,246,0.12);
+  --accent-glow: 0 0 20px rgba(59,130,246,0.3);
+  --blue: #60a5fa;
+  --blue-dim: rgba(96,165,250,0.12);
   --red: #FF6B6B;
   --red-dim: rgba(255,107,107,0.12);
   --yellow: #F59E0B;
@@ -27,6 +28,29 @@
   --radius-lg: 16px;
   --sidebar-width: 220px;
   --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── Light theme ── */
+[data-theme="light"] {
+  --bg-primary: #f0f4ff;
+  --bg-secondary: #ffffff;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f5f8ff;
+  --bg-input: #f0f4ff;
+  --border: rgba(59,130,246,0.12);
+  --border-active: rgba(59,130,246,0.5);
+  --accent: #2563eb;
+  --accent-dim: rgba(37,99,235,0.1);
+  --accent-glow: 0 0 20px rgba(37,99,235,0.2);
+  --blue: #2563eb;
+  --blue-dim: rgba(37,99,235,0.1);
+  --red: #ef4444;
+  --red-dim: rgba(239,68,68,0.1);
+  --yellow: #d97706;
+  --purple: #7c3aed;
+  --text-primary: #0f172a;
+  --text-secondary: rgba(15,23,42,0.6);
+  --text-muted: rgba(15,23,42,0.38);
 }
 
 html, body, #root { height: 100%; }
@@ -110,4 +134,4 @@ body {
 }
 .toast-success { background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.3); color: #10B981; }
 .toast-error { background: rgba(255,107,107,0.15); border: 1px solid rgba(255,107,107,0.3); color: var(--red); }
-.toast-info { background: rgba(79,142,247,0.15); border: 1px solid rgba(79,142,247,0.3); color: var(--blue); }
+.toast-info { background: var(--accent-dim); border: 1px solid var(--border-active); color: var(--accent); }

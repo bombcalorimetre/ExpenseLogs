@@ -22,8 +22,8 @@ export default function Sidebar() {
       <div style={styles.brand}>
         <div style={styles.logo}>
           <svg width="22" height="22" viewBox="0 0 28 28" fill="none">
-            <rect width="28" height="28" rx="7" fill="rgba(0,212,170,0.15)" />
-            <path d="M8 14h12M14 8v12M8 10l6-2 6 2M8 18l6 2 6-2" stroke="#00d4aa" strokeWidth="1.5" strokeLinecap="round" />
+            <rect width="28" height="28" rx="7" fill="rgba(59,130,246,0.15)" />
+            <path d="M8 14h12M14 8v12M8 10l6-2 6 2M8 18l6 2 6-2" stroke="#3b82f6" strokeWidth="1.5" strokeLinecap="round" />
           </svg>
           <div>
             <div style={styles.brandName}>FinCorp Elite</div>
