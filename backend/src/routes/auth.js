@@ -1,7 +1,7 @@
 const express = require('express');
-const bcrypt  = require('bcryptjs');
-const jwt     = require('jsonwebtoken');
-const db      = require('../config/database');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const db = require('../config/database');
 const { authMiddleware, JWT_SECRET } = require('../middleware/auth');
 
 const router = express.Router();
@@ -19,7 +19,7 @@ router.post('/register', (req, res) => {
   if (existing) {
     return res.status(409).json({ error: 'Email already in use' });
   }
-  const hash   = bcrypt.hashSync(password, 10);
+  const hash = bcrypt.hashSync(password, 10);
   const result = db.prepare(`
     INSERT INTO users (name, email, password, account_type)
     VALUES (?, ?, ?, ?)
@@ -30,13 +30,13 @@ router.post('/register', (req, res) => {
   // Create default categories for new user
   const defaultCats = [
     { name: 'Housing & Living', icon: '🏠', color: '#4F8EF7', budget_limit: 2000, type: 'expense' },
-    { name: 'Groceries',        icon: '🛒', color: '#00d4aa', budget_limit: 500,  type: 'expense' },
-    { name: 'Dining & Drinks',  icon: '🍽️', color: '#FF6B6B', budget_limit: 300,  type: 'expense' },
-    { name: 'Transport',        icon: '🚗', color: '#3B82F6', budget_limit: 200,  type: 'expense' },
-    { name: 'Entertainment',    icon: '🎭', color: '#EC4899', budget_limit: 200,  type: 'expense' },
-    { name: 'Shopping',         icon: '🛍️', color: '#F97316', budget_limit: 500,  type: 'expense' },
-    { name: 'Income',           icon: '💰', color: '#10B981', budget_limit: 0,    type: 'income'  },
-    { name: 'Other',            icon: '📦', color: '#6B7280', budget_limit: 0,    type: 'expense' },
+    { name: 'Groceries', icon: '🛒', color: '#00d4aa', budget_limit: 500, type: 'expense' },
+    { name: 'Dining & Drinks', icon: '🍽️', color: '#FF6B6B', budget_limit: 300, type: 'expense' },
+    { name: 'Transport', icon: '🚗', color: '#3B82F6', budget_limit: 200, type: 'expense' },
+    { name: 'Entertainment', icon: '🎭', color: '#EC4899', budget_limit: 200, type: 'expense' },
+    { name: 'Shopping', icon: '🛍️', color: '#F97316', budget_limit: 500, type: 'expense' },
+    { name: 'Income', icon: '💰', color: '#10B981', budget_limit: 0, type: 'income' },
+    { name: 'Other', icon: '📦', color: '#6B7280', budget_limit: 0, type: 'expense' },
   ];
   const insertCat = db.prepare(`
     INSERT INTO categories (user_id, name, icon, color, budget_limit, type)
@@ -45,7 +45,7 @@ router.post('/register', (req, res) => {
   defaultCats.forEach(c => insertCat.run(userId, c.name, c.icon, c.color, c.budget_limit, c.type));
 
   const token = jwt.sign({ id: userId, email, name }, JWT_SECRET, { expiresIn: '7d' });
-  const user  = db.prepare('SELECT id, name, email, account_type, base_currency, created_at FROM users WHERE id = ?').get(userId);
+  const user = db.prepare('SELECT id, name, email, account_type, base_currency, created_at FROM users WHERE id = ?').get(userId);
   res.status(201).json({ token, user });
 });
 

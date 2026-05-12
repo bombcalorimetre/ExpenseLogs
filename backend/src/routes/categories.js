@@ -1,5 +1,5 @@
 const express = require('express');
-const db      = require('../config/database');
+const db = require('../config/database');
 const { authMiddleware } = require('../middleware/auth');
 
 const router = express.Router();
@@ -28,13 +28,7 @@ router.put('/:id', authMiddleware, (req, res) => {
   if (!cat) return res.status(404).json({ error: 'Category not found' });
   db.prepare(`
     UPDATE categories SET name = ?, icon = ?, color = ?, budget_limit = ? WHERE id = ?
-  `).run(
-    name         || cat.name,
-    icon         || cat.icon,
-    color        || cat.color,
-    budget_limit !== undefined ? budget_limit : cat.budget_limit,
-    req.params.id
-  );
+  `).run(name || cat.name, icon || cat.icon, color || cat.color, budget_limit !== undefined ? budget_limit : cat.budget_limit, req.params.id);
   res.json(db.prepare('SELECT * FROM categories WHERE id = ?').get(req.params.id));
 });
 

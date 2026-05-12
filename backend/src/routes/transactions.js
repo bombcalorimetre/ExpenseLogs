@@ -1,23 +1,23 @@
 const express = require('express');
-const db      = require('../config/database');
+const db = require('../config/database');
 const { authMiddleware } = require('../middleware/auth');
 
 const router = express.Router();
 
 // GET /api/transactions
 router.get('/', authMiddleware, (req, res) => {
-  const { page = 1, limit = 20, type, category_id, status, from, to, search } = req.query;
+  const { page = 1, limit = 20, type, category_id, status, from, to, search, account } = req.query;
   const offset = (page - 1) * limit;
   const userId = req.user.id;
 
-  const where  = ['t.user_id = ?'];
-  const params = [userId];
+  let where = ['t.user_id = ?'];
+  let params = [userId];
 
-  if (type)        { where.push('t.type = ?');        params.push(type); }
+  if (type) { where.push('t.type = ?'); params.push(type); }
   if (category_id) { where.push('t.category_id = ?'); params.push(category_id); }
-  if (status)      { where.push('t.status = ?');       params.push(status); }
-  if (from)        { where.push('t.date >= ?');         params.push(from); }
-  if (to)          { where.push('t.date <= ?');          params.push(to); }
+  if (status) { where.push('t.status = ?'); params.push(status); }
+  if (from) { where.push('t.date >= ?'); params.push(from); }
+  if (to) { where.push('t.date <= ?'); params.push(to); }
   if (search) {
     where.push('(t.merchant LIKE ? OR t.description LIKE ?)');
     params.push(`%${search}%`, `%${search}%`);
@@ -25,7 +25,6 @@ router.get('/', authMiddleware, (req, res) => {
 
   const whereClause = where.join(' AND ');
 
-  // Pass LIMIT/OFFSET as part of the params array (wrapper spreads all args)
   const transactions = db.prepare(`
     SELECT t.*, c.name as category_name, c.icon as category_icon, c.color as category_color
     FROM transactions t
@@ -35,16 +34,11 @@ router.get('/', authMiddleware, (req, res) => {
     LIMIT ? OFFSET ?
   `).all(...params, Number(limit), Number(offset));
 
-  const countRow = db.prepare(`
+  const total = db.prepare(`
     SELECT COUNT(*) as count FROM transactions t WHERE ${whereClause}
-  `).get(...params);
+  `).get(...params).count;
 
-  res.json({
-    transactions,
-    total: countRow ? countRow.count : 0,
-    page:  Number(page),
-    limit: Number(limit),
-  });
+  res.json({ transactions, total, page: Number(page), limit: Number(limit) });
 });
 
 // POST /api/transactions
@@ -60,11 +54,7 @@ router.post('/', authMiddleware, (req, res) => {
   const result = db.prepare(`
     INSERT INTO transactions (user_id, category_id, merchant, description, amount, type, status, date, time, tags, reference)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `).run(
-    req.user.id, category_id || null, merchant, description || null,
-    Math.abs(amount), type, status, date, time || null,
-    JSON.stringify(tags), reference || null
-  );
+  `).run(req.user.id, category_id || null, merchant, description || null, Math.abs(amount), type, status, date, time || null, JSON.stringify(tags), reference || null);
 
   const tx = db.prepare(`
     SELECT t.*, c.name as category_name, c.icon as category_icon, c.color as category_color
@@ -87,17 +77,11 @@ router.put('/:id', authMiddleware, (req, res) => {
     SET merchant = ?, description = ?, amount = ?, type = ?, category_id = ?, status = ?, date = ?, time = ?, tags = ?
     WHERE id = ? AND user_id = ?
   `).run(
-    merchant    || tx.merchant,
-    description || tx.description,
-    Math.abs(amount || tx.amount),
-    type        || tx.type,
-    category_id !== undefined ? category_id : tx.category_id,
-    status      || tx.status,
-    date        || tx.date,
-    time        || tx.time,
+    merchant || tx.merchant, description || tx.description, Math.abs(amount || tx.amount),
+    type || tx.type, category_id !== undefined ? category_id : tx.category_id,
+    status || tx.status, date || tx.date, time || tx.time,
     JSON.stringify(tags || JSON.parse(tx.tags || '[]')),
-    req.params.id,
-    req.user.id
+    req.params.id, req.user.id
   );
 
   const updated = db.prepare(`
@@ -105,7 +89,6 @@ router.put('/:id', authMiddleware, (req, res) => {
     FROM transactions t LEFT JOIN categories c ON t.category_id = c.id
     WHERE t.id = ?
   `).get(req.params.id);
-
   res.json(updated);
 });
 
