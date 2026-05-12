@@ -6,58 +6,59 @@ A full-stack wealth management and expense tracking application with real-time a
 
 ## 📁 Repository Structure
 
+Every file listed below is exactly what you'll find inside the zip:
+
 ```
-expense-manager/
+expense-manager/                         ← project root
 │
-├── package.json                    ← Root scripts (run both servers)
+├── README.md                            ← this file
+├── package.json                         ← root convenience scripts
 │
-├── backend/                        ← Node.js + Express + SQLite API
-│   ├── .env                        ← Environment variables (PORT, JWT_SECRET)
-│   ├── .env.example                ← Template for env vars
-│   ├── package.json
-│   ├── data/                       ← Auto-created; holds the SQLite database file
-│   │   └── expense_manager.db      ← SQLite DB (auto-generated on first run)
+├── backend/                             ← Node.js · Express · SQLite
+│   ├── .env                             ← PORT + JWT_SECRET (edit before deploy)
+│   ├── .env.example                     ← safe template to commit
+│   ├── package.json                     ← backend dependencies
 │   └── src/
-│       ├── server.js               ← Express app entry point
+│       ├── server.js                    ← Express entry point, mounts all routes
 │       ├── config/
-│       │   └── database.js         ← SQLite init, schema creation, seed data
+│       │   └── database.js              ← opens SQLite, creates tables, seeds demo data
 │       ├── middleware/
-│       │   └── auth.js             ← JWT verification middleware
+│       │   └── auth.js                  ← JWT Bearer token verification
 │       └── routes/
-│           ├── auth.js             ← POST /login, /register, GET /me, PUT /settings
-│           ├── transactions.js     ← CRUD for transactions
-│           ├── analytics.js        ← Dashboard stats, charts, budgets, goals
-│           └── categories.js       ← CRUD for spending categories
+│           ├── auth.js                  ← /login  /register  /me  /settings  /password
+│           ├── transactions.js          ← GET / POST / PUT / DELETE  /transactions
+│           ├── analytics.js             ← overview, trends, categories, budgets, goals, calendar
+│           └── categories.js            ← GET / POST / PUT / DELETE  /categories
 │
-└── frontend/                       ← React + Vite SPA
-    ├── package.json
-    ├── vite.config.js              ← Dev server with /api proxy to backend
+└── frontend/                            ← React 18 · Vite · Recharts
+    ├── package.json                     ← frontend dependencies
+    ├── vite.config.js                   ← dev server + /api proxy → localhost:5000
     ├── public/
-    │   └── index.html              ← HTML shell with Google Fonts
+    │   └── index.html                   ← HTML shell (Google Fonts: Syne + DM Sans)
     └── src/
-        ├── main.jsx                ← React root mount
-        ├── App.jsx                 ← Router, auth guards, layout shell
+        ├── main.jsx                     ← ReactDOM.createRoot entry
+        ├── App.jsx                      ← BrowserRouter, auth guard, layout wrapper
         ├── styles/
-        │   └── globals.css         ← CSS variables, animations, scrollbar, toast
+        │   └── globals.css              ← CSS variables, keyframes, scrollbar, toasts
         ├── services/
-        │   └── api.js              ← Axios instance + all API call functions
+        │   └── api.js                   ← Axios instance + every API helper function
         ├── context/
-        │   └── AuthContext.jsx     ← Auth state, login/register/logout helpers
+        │   └── AuthContext.jsx          ← global auth state (login / register / logout)
         ├── hooks/
-        │   └── useToast.js         ← Toast notification hook
+        │   └── useToast.js              ← lightweight toast queue hook
         ├── components/
-        │   ├── Toast.jsx           ← Toast notification renderer
+        │   ├── Toast.jsx                ← renders toast stack in top-right corner
         │   ├── Auth/
-        │   │   └── AuthPage.jsx    ← Login + Register page (two-panel layout)
+        │   │   └── AuthPage.jsx         ← two-panel Login + Register screen
         │   └── Layout/
-        │       ├── Sidebar.jsx     ← Navigation sidebar with user card + logout
-        │       └── Header.jsx      ← Top bar with search and notification bell
+        │       ├── Sidebar.jsx          ← left nav with active-link highlight + logout
+        │       └── Header.jsx           ← top search bar + notification bell
         └── pages/
-            ├── Dashboard.jsx       ← Balance, recent transactions, spend chart, budgets
-            ├── History.jsx         ← Full transaction list, filters, Add Expense modal
-            ├── Trends.jsx          ← Analytics: KPIs, line chart, donut, top merchants
-            ├── Calendar.jsx        ← Monthly calendar, day detail, spending velocity
-            └── Settings.jsx        ← Profile, password, categories, appearance
+            ├── Dashboard.jsx            ← balance card, bar chart, transactions, budgets
+            ├── History.jsx              ← filterable transaction list + Add Expense modal
+            ├── Trends.jsx               ← KPI cards, line chart, donut, top merchants
+            ├── Calendar.jsx             ← monthly calendar, day detail, velocity chart
+            └── Settings.jsx             ← profile, password change, categories, theme
 ```
 
 ---
